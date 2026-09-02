@@ -1,0 +1,28 @@
+# Git-Directory-Generator: jedes Verzeichnis unter apps/shop/overlays/ wird eine Application
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: shop-git-dirs
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/<DEIN-ACCOUNT>/kaffee-shop-gitops.git
+        revision: main
+        directories:
+          - path: apps/shop/overlays/*
+  template:
+    metadata:
+      name: 'shop-{{ .path.basename }}'
+    spec:
+      project: nordlicht
+      source:
+        repoURL: https://github.com/<DEIN-ACCOUNT>/kaffee-shop-gitops.git
+        targetRevision: main
+        path: '{{ .path.path }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'shop-{{ .path.basename }}'
+      syncPolicy:
+        syncOptions: [CreateNamespace=true]

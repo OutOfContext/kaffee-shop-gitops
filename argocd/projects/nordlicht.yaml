@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: nordlicht
+  namespace: argocd
+spec:
+  description: Alle Workloads der Rösterei Nordlicht Kaffee
+  sourceRepos:
+    - https://github.com/<DEIN-ACCOUNT>/kaffee-shop-gitops.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: shop-*
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceBlacklist:
+    - group: ""
+      kind: ResourceQuota
+  roles:
+    - name: developer
+      description: Darf dev syncen, prod nur ansehen
+      policies:
+        - p, proj:nordlicht:developer, applications, get,  nordlicht/*, allow
+        - p, proj:nordlicht:developer, applications, sync, nordlicht/shop-dev, allow
+      groups:
+        - nordlicht-devs

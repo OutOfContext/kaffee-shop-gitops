@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: feature-flags
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"   # vor allem anderen
+data:
+  DARK_ROAST_PROMO: "true"

@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: shop-prod
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: nordlicht
+  source:
+    repoURL: https://github.com/<DEIN-ACCOUNT>/kaffee-shop-gitops.git
+    targetRevision: main
+    path: apps/shop/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: shop-prod
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    # prod: bewusst KEIN automated -> Sync nur nach Freigabe

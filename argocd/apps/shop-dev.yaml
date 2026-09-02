@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: shop-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: nordlicht
+  source:
+    repoURL: https://github.com/<DEIN-ACCOUNT>/kaffee-shop-gitops.git
+    targetRevision: main
+    path: apps/shop/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: shop-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

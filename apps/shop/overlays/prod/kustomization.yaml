@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: shop-prod
+resources:
+  - ../../base
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3
+    target:
+      kind: Deployment
+      name: kaffee-shop
+  - patch: |-
+      - op: replace
+        path: /spec/ports/0/nodePort
+        value: 30082
+    target:
+      kind: Service
+      name: kaffee-shop
+  - patch: |-
+      - op: replace
+        path: /data/index.html
+        value: |
+          <!doctype html><html lang="de"><head><meta charset="utf-8"><title>Nordlicht Kaffee</title>
+          <style>body{font-family:system-ui;background:#1b1410;color:#f3e9dc;display:grid;place-items:center;height:100vh;margin:0}
+          h1{font-size:3rem;margin:0}p{color:#c9a37a}.v{font-family:monospace;background:#2a1f18;padding:.3rem .6rem;border-radius:6px}</style></head>
+          <body><div style="text-align:center"><h1>☕ Nordlicht Kaffee</h1><p>Handgeröstet in Hamburg-Altona</p>
+          <p>Version: <span class="v">1.0.0</span> &nbsp; Umgebung: <span class="v">prod</span></p></div></body></html>
+    target:
+      kind: ConfigMap
+      name: kaffee-shop-html

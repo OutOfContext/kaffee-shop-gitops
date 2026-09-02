@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: shop-envs
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - list:
+        elements:
+          - env: dev
+            autoSync: "true"
+          - env: prod
+            autoSync: "false"
+  template:
+    metadata:
+      name: 'shop-{{ .env }}'
+    spec:
+      project: nordlicht
+      source:
+        repoURL: https://github.com/<DEIN-ACCOUNT>/kaffee-shop-gitops.git
+        targetRevision: main
+        path: 'apps/shop/overlays/{{ .env }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'shop-{{ .env }}'
+      syncPolicy:
+        syncOptions: [CreateNamespace=true]
+  templatePatch: |
+    {{- if eq .autoSync "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}
