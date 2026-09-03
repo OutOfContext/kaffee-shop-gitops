@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata: { name: argocd-alerts, namespace: argocd }
+spec:
+  groups:
+    - name: argocd
+      rules:
+        - alert: ArgoAppOutOfSync
+          expr: argocd_app_info{sync_status="OutOfSync"} == 1
+          for: 15m
+          labels: { severity: warning }
+          annotations: { summary: "{{ $labels.name }} ist seit 15 min OutOfSync" }
+        - alert: ArgoAppDegraded
+          expr: argocd_app_info{health_status="Degraded"} == 1
+          for: 5m
+          labels: { severity: critical }
+        - alert: ArgoSyncFailed
+          expr: increase(argocd_app_sync_total{phase=~"Error|Failed"}[10m]) > 0
+          labels: { severity: warning }
+        - alert: ArgoReconcileSlow
+          expr: histogram_quantile(0.95, sum(rate(argocd_app_reconcile_bucket[5m])) by (le)) > 30
+          for: 10m
+          labels: { severity: warning }
