@@ -7,8 +7,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/<DEIN-ACCOUNT>/kaffee-shop-gitops.git
-    targetRevision: main
+    repoURL: https://github.com/OutOfContext/kaffee-shop-gitops.git
+    targetRevision: master
     path: argocd/apps
   destination:
     server: https://kubernetes.default.svc

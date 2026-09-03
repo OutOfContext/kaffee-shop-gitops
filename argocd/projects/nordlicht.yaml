@@ -6,7 +6,7 @@ metadata:
 spec:
   description: Alle Workloads der Rösterei Nordlicht Kaffee
   sourceRepos:
-    - https://github.com/<DEIN-ACCOUNT>/kaffee-shop-gitops.git
+    - https://github.com/OutOfContext/kaffee-shop-gitops.git
   destinations:
     - server: https://kubernetes.default.svc
       namespace: shop-*

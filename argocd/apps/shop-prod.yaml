@@ -8,8 +8,8 @@ metadata:
 spec:
   project: nordlicht
   source:
-    repoURL: https://github.com/<DEIN-ACCOUNT>/kaffee-shop-gitops.git
-    targetRevision: main
+    repoURL: https://github.com/OutOfContext/kaffee-shop-gitops.git
+    targetRevision: master
     path: apps/shop/overlays/prod
   destination:
     server: https://kubernetes.default.svc
