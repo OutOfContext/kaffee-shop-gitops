@@ -14,11 +14,11 @@ spec:
           - path: demo/tenants/*/*      # tenant/env-Struktur
   template:
     metadata:
-      name: "{{path[3]}}-{{path[4]}}"                 # z. B. tschibo-prod
+      name: "{{path[2]}}-{{path[3]}}"                 # z. B. tschibo-prod
       labels:
         layer: "tenants"
-        tenant: "{{path[3]}}"
-        environment: "{{path[4]}}"
+        tenant: "{{path[2]}}"
+        environment: "{{path[3]}}"
     spec:
       project: kaffee-shops
       source:
@@ -26,10 +26,10 @@ spec:
         targetRevision: master
         path: "{{path}}"                              # direktes Helm-Chart
         helm:
-          releaseName: "{{path[3]}}-{{path[4]}}"
+          releaseName: "{{path[2]}}-{{path[3]}}"
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{path[3]}}-{{path[4]}}"
+        namespace: "{{path[2]}}-{{path[3]}}"
       syncPolicy:
         automated:
           prune: true
