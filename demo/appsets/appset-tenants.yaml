@@ -20,7 +20,7 @@ spec:
         tenant: "{{path[3]}}"
         environment: "{{path[4]}}"
     spec:
-      project: enno-rev
+      project: kaffee-shops
       source:
         repoURL: https://github.com/OutOfContext/kaffee-shop-gitops
         targetRevision: master
