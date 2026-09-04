@@ -1,0 +1,13 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: shop-db
+  namespace: shop-dev
+spec:
+  encryptedData:
+    password: AgCLltVqCqMO/QpXtFmiD31vPMkAL2ka8FDEAfXBEbJX98poNVkiTM1tUH+chHmaccim8x8ezpvugKRf7BDPhuiqL68WVUWbe9FTYwkUOMeWJ4IW7jJD0O+KH3k9Tbu+Z9/Frn6uECJ/xDDC54xP0snrGyspVAp8tlSIARw07hpgGQsdzFNir+jQddJZEjE5lY+lqR7niH0M+P70RR1qUd+FmPqhG3yzZpl3cfLdg1ucPh954BDXCt9tEBUuXZWeGo8a/yqIINyLUDeC+zzbUOKR+PYqY/qIpG8MFeNepn+oU6t/pLxLT3Kb483GiDkLCcBI63CoTCvI/SdGi5q/IInD39xX4H8U1uCLV8juR1xVJ6MVDofVWqAbhnJ9ZIKgCd+QooS47Th3B8Tzx/cd1fDAclxaoWHpVbXnGcbpaTizmBaLMmdWIdLPrHq1Fos30ECoeTc6KlmJX2UQMSiynwHBYD9wl7OIdf+HGzfvwIZj359SGYsoZewM85gZGR/T0zjXIQcvk/ZjHXhxZbrRdKI4JNAFfQOIMLvt9yzFELB4KOL09WoYHMpFGhhZBLDT0x0V3eE8b7SJeFuNYiToBOWODYne6VYpAWgZOkwOczhlBJuUQBxHv6Y7rhA+SHEkl5dcE6xEtHsfsFAacr5kz/9QYT5Pl6rrY+ZnYSZ0Q9eg6QPih6QZiCoMRTrUOhpbmNqX0Z8QQsP5
+  template:
+    metadata:
+      name: shop-db
+      namespace: shop-dev
