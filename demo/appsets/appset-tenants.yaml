@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tenants
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/OutOfContext/kaffee-shop-gitops
+        revision: master
+        directories:
+          - path: demo/tenants/*/*      # tenant/env-Struktur
+  template:
+    metadata:
+      name: "{{path[3]}}-{{path[4]}}"                 # z. B. tschibo-prod
+      labels:
+        layer: "tenants"
+        tenant: "{{path[3]}}"
+        environment: "{{path[4]}}"
+    spec:
+      project: enno-rev
+      source:
+        repoURL: https://github.com/OutOfContext/kaffee-shop-gitops
+        targetRevision: master
+        path: "{{path}}"                              # direktes Helm-Chart
+        helm:
+          releaseName: "{{path[3]}}-{{path[4]}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{path[3]}}-{{path[4]}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true

@@ -1,0 +1,9 @@
+replicaCount: 1
+image:
+  repository: nginx
+  tag: 1.27-alpine
+environment: prod
+nodePort: 30083
+resources:
+  requests: { cpu: 20m, memory: 32Mi }
+  limits:   { cpu: 200m, memory: 64Mi }

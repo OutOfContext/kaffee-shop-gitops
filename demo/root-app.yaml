@@ -1,0 +1,17 @@
+# App of Apps: diese eine Application erzeugt alle Kinder aus argocd/apps/
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kaffee-root
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/OutOfContext/kaffee-shop-gitops.git
+    targetRevision: master
+    path: demo/appsets
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }

@@ -1,26 +1,32 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
-metadata:
-  name: nordlicht
-  namespace: argocd
+metadata: { name: nordlicht, namespace: argocd }
 spec:
-  description: Alle Workloads der Rösterei Nordlicht Kaffee
+  description: Alle Workloads der Rösterei
   sourceRepos:
-    - https://github.com/OutOfContext/kaffee-shop-gitops.git
+    - https://github.com/OutOfContext/kaffee-shop-gitops.git     # Wildcards erlaubt: https://github.com/nordlicht/*
   destinations:
     - server: https://kubernetes.default.svc
-      namespace: shop-*
-  clusterResourceWhitelist:
-    - group: ""
-      kind: Namespace
-  namespaceResourceBlacklist:
-    - group: ""
-      kind: ResourceQuota
+      namespace: shop-*                                   # Glob
+    - name: prod                                          # per Cluster-Name statt URL
+      namespace: shop-prod
+  clusterResourceWhitelist:                               # Cluster-weite Kinds explizit erlauben
+    - { group: "", kind: Namespace }
+  namespaceResourceBlacklist:                             # oder -Whitelist
+    - { group: "", kind: ResourceQuota }
+    - { group: "", kind: LimitRange }
   roles:
     - name: developer
-      description: Darf dev syncen, prod nur ansehen
       policies:
-        - p, proj:nordlicht:developer, applications, get,  nordlicht/*, allow
+        - p, proj:nordlicht:developer, applications, get,  nordlicht/*,        allow
         - p, proj:nordlicht:developer, applications, sync, nordlicht/shop-dev, allow
-      groups:
-        - nordlicht-devs
+      groups: [ nordlicht-devs ]                           # SSO-Gruppe
+      jwtTokens: []                                        # API-Tokens für CI
+  syncWindows:
+    - kind: deny
+      schedule: "0 22 * * 5"      # Freitag 22:00
+      duration: 58h               # bis Montag 08:00
+      applications: [ shop-prod ]
+      manualSync: false           # auch manuell verboten
+  orphanedResources:
+    warn: true                    # Objekte im Namespace ohne Application melden
